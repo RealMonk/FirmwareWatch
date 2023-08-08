@@ -39,6 +39,13 @@ class Memory:
                 ''')
         return c.fetchall()
 
+    def get_user(self, chat_id):
+        c = self._conn.cursor()
+        c.execute('''
+                SELECT * FROM chat_list
+                WHERE chat_id = ?
+                ''', (chat_id,))
+        return c.fetchone()
 
 if __name__ == '__main__':
     pass
