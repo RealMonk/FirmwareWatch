@@ -25,7 +25,10 @@ print(chr(246), chr(9786), chr(9787))
 mem = Memory()
 mem.init_db()
 
-BOT_TOKEN = '***REMOVED***'
+with open('key', 'r', encoding='utf-8') as file:
+    BOT_TOKEN = file.read().rstrip()
+    print(BOT_TOKEN)
+
 BASE_BOT_URL = f'https://api.telegram.org/bot{BOT_TOKEN}'
 UPDATE_OFFSET = 0
 
