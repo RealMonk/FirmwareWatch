@@ -25,6 +25,10 @@ print(chr(246), chr(9786), chr(9787))
 mem = Memory()
 mem.init_db()
 
+script_dir = os.path.dirname(__file__) #<-- absolute dir the script is in
+REL_PATH = "/key"
+abs_file_path = os.path.join(script_dir, REL_PATH)
+
 with open('key', 'r', encoding='utf-8') as file:
     BOT_TOKEN = file.read().rstrip()
     print(BOT_TOKEN)
