@@ -32,6 +32,8 @@ class Commands(enum.StrEnum):
     CHECK_COMMAND = 'check'
     BMC_IMPLEMENTED_COMMAND = 'bmc_implemented'
     BIOS_IMPLEMENTED_COMMAND = 'bios_implemented'
+    DEIMPLEMENT_BMC_COMMAND = 'deimplement_bmc'
+    DEIMPLEMENT_BIOS_COMMAND = 'deimplement_bios'
 
 
 BOT_COMMANDS = [{'command': Commands.START_COMMAND, 'description': 'Subscribe to recieive update notifications'},
@@ -39,6 +41,8 @@ BOT_COMMANDS = [{'command': Commands.START_COMMAND, 'description': 'Subscribe to
                 {'command': Commands.CHECK_COMMAND, 'description': 'Check current version'},
                 {'command': Commands.BMC_IMPLEMENTED_COMMAND, 'description': 'set current BMC version as implemented'},
                 {'command': Commands.BIOS_IMPLEMENTED_COMMAND, 'description': 'set current BIOS version as implemented'},
+                {'command': Commands.DEIMPLEMENT_BMC_COMMAND, 'description': 'deimplement BMC'},
+                {'command': Commands.DEIMPLEMENT_BIOS_COMMAND, 'description': 'deimplement BIOS'},
                 {'command': Commands.HELP_COMMAND, 'description': 'Show help'}]
 print(BOT_COMMANDS)
 # help_message = """
@@ -84,29 +88,33 @@ def check_firmware():
 
 
 def check_version_and_notify():
-    if BMC_VERSION != BMC_IMPLEMENTED_VERSION:
+    bmc_implemented = mem.get_bmc_version()
+    bios_implemented = mem.get_bios_version()
+    if BMC_VERSION != bmc_implemented:
         bmc_text_to_send = (
-            f'New BMC version ({BMC_VERSION}) is different from implemented version({BMC_IMPLEMENTED_VERSION})')
+            f'New BMC version ({BMC_VERSION}) is different from implemented version({bmc_implemented})')
         logger.info(bmc_text_to_send)
         sent_message_to_all(bmc_text_to_send)
 
-    if BIOS_VERSION != BIOS_IMPLEMENTED_VERSION:
+    if BIOS_VERSION != bios_implemented:
         bios_text_to_send = (
-            f'New BIOS version ({BIOS_VERSION}) is different from implemented version({BIOS_IMPLEMENTED_VERSION})')
+            f'New BIOS version ({BIOS_VERSION}) is different from implemented version({bios_implemented})')
         logger.info(bios_text_to_send)
         sent_message_to_all(bios_text_to_send)
 
 
 def check_version_and_notify_specific_user(chat_id):
-    if BMC_VERSION != BMC_IMPLEMENTED_VERSION:
+    bmc_implemented = mem.get_bmc_version()
+    bios_implemented = mem.get_bios_version()
+    if BMC_VERSION != bmc_implemented:
         bmc_text_to_send = (
-            f'New BMC version ({BMC_VERSION}) is different from implemented version({BMC_IMPLEMENTED_VERSION})')
+            f'New BMC version ({BMC_VERSION}) is different from implemented version({bmc_implemented})')
         logger.info(bmc_text_to_send)
         send_message_to_specific_user(chat_id, bmc_text_to_send)
 
-    if BIOS_VERSION != BIOS_IMPLEMENTED_VERSION:
+    if BIOS_VERSION != bios_implemented:
         bios_text_to_send = (
-            f'New BIOS version ({BIOS_VERSION}) is different from implemented version({BIOS_IMPLEMENTED_VERSION})')
+            f'New BIOS version ({BIOS_VERSION}) is different from implemented version({bios_implemented})')
         logger.info(bios_text_to_send)
         send_message_to_specific_user(chat_id, bios_text_to_send)
 
@@ -174,12 +182,18 @@ def react_on_commands():
                         check_version_and_notify_specific_user(chat_id)
                     case Commands.BMC_IMPLEMENTED_COMMAND:
                         BMC_IMPLEMENTED_VERSION = BMC_VERSION
+                        mem.implement_bmc(BMC_IMPLEMENTED_VERSION)
                         logger.info("New implemented BMC version: " + BMC_IMPLEMENTED_VERSION)
                         sent_message_to_all('New implemented BMC version: ' + BMC_IMPLEMENTED_VERSION)
                     case Commands.BIOS_IMPLEMENTED_COMMAND:
                         BIOS_IMPLEMENTED_VERSION = BIOS_VERSION
+                        mem.implement_bios(BIOS_IMPLEMENTED_VERSION)
                         logger.info("New implemented BIOS version: " + BIOS_IMPLEMENTED_VERSION)
                         sent_message_to_all('New implemented BIOS version: ' + BIOS_IMPLEMENTED_VERSION)
+                    case Commands.DEIMPLEMENT_BMC_COMMAND:
+                        mem.deimplement_bmc()
+                    case Commands.DEIMPLEMENT_BIOS_COMMAND:
+                        mem.deimplement_bios()
                     case Commands.HELP_COMMAND:
                         logger.info("Displaying help")
                         send_message_to_specific_user(chat_id, help_message)
