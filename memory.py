@@ -24,6 +24,7 @@ class Memory:
                 INSERT OR IGNORE INTO current_implemented_version (firmware, version_number)
                 VALUES ('BIOS', 0)
         ''')
+        c.execute('pragma encoding')
         self._conn.commit()
 
     def add_user(self, chat_id, user_name):
