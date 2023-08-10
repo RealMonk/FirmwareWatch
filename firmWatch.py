@@ -25,11 +25,11 @@ print(chr(246), chr(9786), chr(9787))
 mem = Memory()
 mem.init_db()
 
-script_dir = os.path.dirname(__file__) #<-- absolute dir the script is in
+script_dir = os.path.dirname(__file__)  # <-- absolute dir the script is in
 REL_PATH = "key"
 abs_file_path = os.path.join(script_dir, REL_PATH)
 
-with open('key', 'r', encoding='utf-8') as file:
+with open(abs_file_path, 'r', encoding='utf-8') as file:
     BOT_TOKEN = file.read().rstrip()
     print(BOT_TOKEN)
 
@@ -59,7 +59,8 @@ BOT_COMMANDS = [{'command': Commands.START_COMMAND, 'description': 'Subscribe to
                 {'command': Commands.STOP_COMMAND, 'description': 'Unsubscribe to stop recieving update notifications'},
                 {'command': Commands.CHECK_COMMAND, 'description': 'Check current version'},
                 {'command': Commands.BMC_IMPLEMENTED_COMMAND, 'description': 'set current BMC version as implemented'},
-                {'command': Commands.BIOS_IMPLEMENTED_COMMAND, 'description': 'set current BIOS version as implemented'},
+                {'command': Commands.BIOS_IMPLEMENTED_COMMAND,
+                 'description': 'set current BIOS version as implemented'},
                 {'command': Commands.DEIMPLEMENT_BMC_COMMAND, 'description': 'deimplement BMC'},
                 {'command': Commands.DEIMPLEMENT_BIOS_COMMAND, 'description': 'deimplement BIOS'},
                 {'command': Commands.HELP_COMMAND, 'description': 'Show help'}]
@@ -187,14 +188,14 @@ def react_on_commands():
                         if user is None:
                             mem.add_user(chat_id, user_name)
                             send_message_to_specific_user(chat_id,
-                                                     f'Welcome, {user_name}! You have been added to the user list.')
+                                                          f'Welcome, {user_name}! You have been added to the user list.')
                             logger.info(str(chat_id) + f' Welcome, {user_name}! You have been added to the user list.')
                             check_version_and_notify_specific_user(chat_id)
                     case Commands.STOP_COMMAND:
                         if user is not None:
                             mem.delete_user(chat_id)
                             send_message_to_specific_user(chat_id,
-                                                     f'Goodbye, {user_name}! You have been deleted from the user list.')
+                                                          f'Goodbye, {user_name}! You have been deleted from the user list.')
                             logger.info(
                                 str(chat_id) + f' Goodbye, {user_name}! You have been deleted from the user list.')
                     case Commands.CHECK_COMMAND:
