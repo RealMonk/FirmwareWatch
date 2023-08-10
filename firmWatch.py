@@ -160,7 +160,7 @@ def react_on_commands():
                 chat_id = update['message']['chat']['id']
                 user = mem.get_user(chat_id)
                 message_text = update['message']['text']
-                user_name = update['message']['from']['username']
+                user_name = update['message']['from']['first_name']
                 print(message_text)
                 match message_text[1:]:  # skipping '/'
                     case Commands.START_COMMAND:
