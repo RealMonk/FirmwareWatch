@@ -10,6 +10,17 @@ import schedule
 from lxml import html
 from memory import Memory
 
+import sys, locale, os
+
+sys.stdin.reconfigure(encoding='utf-8')
+sys.stdout.reconfigure(encoding='utf-8')
+print(sys.stdout.encoding)
+print(sys.stdout.isatty())
+print(locale.getpreferredencoding())
+print(sys.getfilesystemencoding())
+print(os.environ["PYTHONIOENCODING"])
+print(chr(246), chr(9786), chr(9787))
+
 mem = Memory()
 mem.init_db()
 
@@ -57,6 +68,7 @@ for i in BOT_COMMANDS:
 
 # SETTING UP LOGGER
 ########################################
+
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 formatter = logging.Formatter('%(asctime)s | %(levelname)s | %(message)s')
@@ -66,7 +78,7 @@ stdout_handler.setLevel(logging.DEBUG)
 stdout_handler.setFormatter(formatter)
 
 # file_handler = logging.FileHandler('./logs.log')
-file_handler = RotatingFileHandler('./logs.log', maxBytes=5 * 1024 * 1024, backupCount=5)
+file_handler = RotatingFileHandler('./logs.log', maxBytes=5 * 1024 * 1024, backupCount=5, encoding='utf-8')
 file_handler.setLevel(logging.DEBUG)
 file_handler.setFormatter(formatter)
 
